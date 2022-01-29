@@ -39,12 +39,16 @@ namespace API.Repository.Data
         public IEnumerable<RegisterVM> GetRegisteredData(){
             var employees = myContext.Employees;
             var accounts = myContext.Accounts;
+            var accountRoles = myContext.AccountRoles;
+            var roles = myContext.Roles;
             var profilings = myContext.Profilings;
             var educations = myContext.Educations;
             var universities = myContext.Universities;
 
             var result = (from e in employees
                           join a in accounts on e.NIK equals a.NIK
+                          join ar in accountRoles on a.NIK equals ar.Account_NIK
+                          join r in roles on ar.Role_Id equals r.Id
                           join p in profilings on a.NIK equals p.NIK
                           join ed in educations on p.Education_Id equals ed.Id
                           join u in universities on ed.University_Id equals u.Id
@@ -58,7 +62,8 @@ namespace API.Repository.Data
                               Email = e.Email,
                               Degree = ed.Degree,
                               GPA = ed.GPA,
-                              UniversityName = u.Name
+                              UniversityName = u.Name,
+                              RoleName = r.Name
                           }).ToList();
 
             return result;
@@ -99,6 +104,14 @@ namespace API.Repository.Data
                     };
 
                     myContext.Accounts.Add(account);
+                    myContext.SaveChanges();
+
+                    var accountRole = new AccountRole()
+                    {
+                        Account_NIK = employee.NIK,
+                        Role_Id = 1
+                    };
+                    myContext.AccountRoles.Add(accountRole);
                     myContext.SaveChanges();
 
                     var education = new Education

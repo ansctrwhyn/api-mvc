@@ -78,5 +78,43 @@ namespace API.Controllers
                 return StatusCode(400, new { status = HttpStatusCode.BadRequest, result, message = "Gagal" });
             }
         }
+
+        [Route("changepassword")]
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePasswordVM cp)
+        {
+            var result = accountRepository.ChangePassword(cp);
+            if (result != 0)
+            {
+                if (result == 2)
+                {
+                    return StatusCode(400, new { status = HttpStatusCode.BadRequest, result, message = "Akun tidak ditemukan!" });
+                }
+                else if (result == 3)
+                {
+                    return StatusCode(400, new { status = HttpStatusCode.BadRequest, result, message = "OTP Invalid!" });
+                }
+                else if (result == 4)
+                {
+                    return StatusCode(400, new { status = HttpStatusCode.BadRequest, result, message = "OTP sudah digunakan!" });
+                }
+                else if (result == 5)
+                {
+                    return StatusCode(400, new { status = HttpStatusCode.BadRequest, result, message = "OTP Expired!" });
+                }
+                else if (result == 6)
+                {
+                    return StatusCode(400, new { status = HttpStatusCode.BadRequest, result, message = "Password tidak sama!" });
+                }
+                else
+                {
+                    return StatusCode(200, new { status = HttpStatusCode.OK, result, message = "Change Password Berhasil" });
+                }
+            }
+            else
+            {
+                return StatusCode(400, new { status = HttpStatusCode.BadRequest, result, message = "Gagal" });
+            }
+        }
     }
 }

@@ -66,7 +66,7 @@ namespace API.Repository.Data
             if (cekEmail != null) {
                 var cekAccount = myContext.Accounts.Where(a => a.NIK == cekEmail.NIK).FirstOrDefault();
                 Random rand = new Random();
-                var token = rand.Next(0, 1000000).ToString("D6");
+                var token = rand.Next(100000, 1000000).ToString("D6");
                 cekAccount.OTP = int.Parse(token);
 
                 var time = DateTime.Now.AddMinutes(5);
@@ -80,12 +80,12 @@ namespace API.Repository.Data
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("milleepark94@gmail.com");
                 mail.To.Add(fp.Email);
-                mail.Subject = "OTP Forgot Password";
+                mail.Subject = ($"OTP Forgot Password {DateTime.Now.ToString("G")}");
                 mail.Body = ($"OTP : <strong> {token} </strong> <br/> Expired at : {time.ToString("G")}");
                 mail.IsBodyHtml = true;
 
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-                smtp.Credentials = new NetworkCredential("milleepark94@gmail.com", "xxxxxxxxxxx");
+                smtp.Credentials = new NetworkCredential("milleepark94@gmail.com", "ansctrwhyn");
                 smtp.EnableSsl = true;
                 smtp.Send(mail);
                 return 1;
@@ -96,9 +96,49 @@ namespace API.Repository.Data
             }
         }
 
-        /*public int ChangePassword(ChangePasswordVM cp)
+        public int ChangePassword(ChangePasswordVM cp)
         {
-            return 0;
-        }*/
+            var cekEmail = myContext.Employees.Where(e => e.Email == cp.Email).FirstOrDefault();
+            if (cekEmail != null)
+            {
+                var cekAccount = myContext.Accounts.Where(a => a.NIK == cekEmail.NIK).FirstOrDefault();
+                if (cp.OTP == cekAccount.OTP) 
+                {
+                    if (cekAccount.IsUsed == false) 
+                    {
+                        if (DateTime.Now < cekAccount.ExpiredToken) 
+                        {
+                            if (cp.NewPassword == cp.ConfirmPassword)
+                            {
+                                cekAccount.Password = BCrypt.Net.BCrypt.HashPassword(cp.NewPassword);
+                                myContext.Entry(cekAccount).State = EntityState.Modified;
+                                cekAccount.IsUsed = true;
+                                return myContext.SaveChanges();
+                            }
+                            else
+                            {
+                                return 6;
+                            }
+                        }
+                        else
+                        {
+                            return 5;
+                        }
+                    }
+                    else
+                    {
+                        return 4;
+                    }
+                }
+                else
+                {
+                    return 3;
+                }
+            }
+            else
+            {
+                return 2;
+            }
+        }
     }
 }
