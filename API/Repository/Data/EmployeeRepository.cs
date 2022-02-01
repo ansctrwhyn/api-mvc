@@ -36,7 +36,7 @@ namespace API.Repository.Data
             return result;
         }
 
-        public IEnumerable<RegisterVM> GetRegisteredData(){
+        public IEnumerable<UserDataVM> GetRegisteredData(){
             var employees = myContext.Employees;
             var accounts = myContext.Accounts;
             var accountRoles = myContext.AccountRoles;
@@ -53,7 +53,7 @@ namespace API.Repository.Data
                           join ed in educations on p.Education_Id equals ed.Id
                           join u in universities on ed.University_Id equals u.Id
 
-                          select new RegisterVM
+                          select new UserDataVM
                           {
                               FullName = e.FirstName + " " + e.LastName,
                               Phone = e.Phone,

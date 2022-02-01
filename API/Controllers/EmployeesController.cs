@@ -2,7 +2,9 @@
 using API.Models;
 using API.Models.ViewModel;
 using API.Repository.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Net;
 
@@ -13,9 +15,11 @@ namespace API.Controllers
     public class EmployeesController : BasesController<Employee, EmployeeRepository, string>
     {
         private readonly EmployeeRepository employeeRepository;
-        public EmployeesController(EmployeeRepository employeeRepository) : base(employeeRepository)
+        public IConfiguration _configuration;
+        public EmployeesController(EmployeeRepository employeeRepository, IConfiguration configuration) : base(employeeRepository)
         {
             this.employeeRepository = employeeRepository;
+            this._configuration = configuration;
         }
 
         [HttpPost]
@@ -77,6 +81,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize(Roles = "Director, Direct Manager")]
         [Route("register")]
         [HttpGet]
         public ActionResult GetRegister()

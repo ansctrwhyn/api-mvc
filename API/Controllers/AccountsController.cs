@@ -1,18 +1,33 @@
 ﻿using API.Base;
+using API.Context;
 using API.Models;
 using API.Models.ViewModel;
 using API.Repository.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
+using System.Security.Claims;
+using System.Text;
 
 namespace API.Controllers
 {
     public class AccountsController : BasesController<Account, AccountRepository, string>
     {
         private readonly AccountRepository accountRepository;
-        public AccountsController(AccountRepository accountRepository) : base(accountRepository)
+        public IConfiguration _configuration;
+        public MyContext myContext;
+
+        public AccountsController(AccountRepository accountRepository, IConfiguration configuration, MyContext myContext) : base(accountRepository)
         {
             this.accountRepository = accountRepository;
+            this._configuration = configuration;
+            this.myContext = myContext;
         }
 
         [Route("login")]
@@ -32,10 +47,39 @@ namespace API.Controllers
                 }
                 else
                 {
-                    return StatusCode(200, new { status = HttpStatusCode.OK, result, message = "Berhasil Login" });
-                    //return RedirectToAction("Profile");
-                    /*var result2 = accountRepository.GetProfile(loginVM);
-                    return StatusCode(200, new { status = HttpStatusCode.OK, result2, message = "Data berhasil ditampilkan" });*/
+                    /*var getUserData = accountRepository.GetUserRole(loginVM);
+
+                    var role = "";
+                    foreach (var data in getUserData)
+                    {
+                       role = data.RoleName;
+                    }*/
+
+                    var getUserData = myContext.Employees.Where(e => e.Email == loginVM.Email || e.Phone == loginVM.Email).FirstOrDefault();
+                    var getRole = myContext.Roles.Where(r => r.AccountRoles.Any(ar => ar.Account.NIK == getUserData.NIK)).ToList();
+
+                    var claims = new List<Claim>
+                    {
+                        new Claim("Email", loginVM.Email) //payload
+                    };
+
+                    foreach (var item in getRole)
+                    {
+                        claims.Add(new Claim("roles", item.Name));
+                    }
+
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                    var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256); //Header
+                    var token = new JwtSecurityToken(
+                        _configuration["Jwt:Issuer"],
+                        _configuration["Jwt:Audience"],
+                        claims,
+                        expires: DateTime.UtcNow.AddMinutes(10), //set expired times
+                        signingCredentials: signIn);
+                    var idToken = new JwtSecurityTokenHandler().WriteToken(token); //generate token
+                    claims.Add(new Claim("TokenSecurity", idToken.ToString()));
+
+                    return StatusCode(200, new { status = HttpStatusCode.OK, idToken, result, message = "Berhasil Login" });
                 }
             }
             else
@@ -43,6 +87,14 @@ namespace API.Controllers
                 return StatusCode(400, new { status = HttpStatusCode.BadRequest, result, message = "Gagal Login" });
             }
         }
+
+        [Authorize]
+        [HttpGet("TestJWT")]
+        public ActionResult TestJWT()
+        {
+            return Ok("Test JWT Berhasil");
+        }
+
 
         /*public ActionResult Profile(LoginVM loginVM)
         {

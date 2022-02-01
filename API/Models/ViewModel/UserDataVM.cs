@@ -13,6 +13,7 @@ namespace API.Models.ViewModel
         public string Degree { get; set; }
         public string GPA { get; set; }
         public string UniversityName { get; set; }
+        public string RoleName { get; set; }
         public Gender Gender { get; set; }
     }
 }

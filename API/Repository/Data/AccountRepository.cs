@@ -2,18 +2,23 @@
 using API.Models;
 using API.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Claims;
+using System.Text;
 
 namespace API.Repository.Data
 {
     public class AccountRepository : GeneralRepository<MyContext, Account, string>
     {
         private readonly MyContext myContext;
+
         public AccountRepository(MyContext myContext) : base(myContext)
         {
             this.myContext = myContext;
@@ -21,7 +26,7 @@ namespace API.Repository.Data
 
         public int Login(LoginVM loginVM)
         {
-            var cekEmailPhone = myContext.Employees.Where(e => e.Email == loginVM.EmailPhone || e.Phone == loginVM.EmailPhone).FirstOrDefault();
+            var cekEmailPhone = myContext.Employees.Where(e => e.Email == loginVM.Email || e.Phone == loginVM.Email).FirstOrDefault();
 
             if (cekEmailPhone != null)
             {
@@ -42,20 +47,21 @@ namespace API.Repository.Data
             }
         }
 
-        /*public IEnumerable<UserDataVM> GetProfile(LoginVM loginVM)
+        /*public IEnumerable<RegisterVM> GetUserRole(LoginVM loginVM)
         {
-            var result = myContext.Employees.Include(a => a.Account).ThenInclude(p => p.Profiling).ThenInclude(e => e.Education).ThenInclude(u => u.University).
-                        Select(x => new UserDataVM
-                        {
-                            FullName = x.FirstName + " " + x.LastName,
-                            Phone = x.Phone,
-                            BirthDate = x.BirthDate,
-                            Salary = x.Salary,
-                            Email = x.Email,
-                            Degree = x.Account.Profiling.Education.Degree,
-                            GPA = x.Account.Profiling.Education.GPA,
-                            UniversityName = x.Account.Profiling.Education.University.Name
-                        }).Where(x => x.Email == loginVM.EmailPhone || x.Phone == loginVM.EmailPhone);
+            var employees = myContext.Employees;
+            var accounts = myContext.Accounts;
+            var accountRoles = myContext.AccountRoles;
+            var roles = myContext.Roles;
+
+            var result = (from e in employees
+                          join a in accounts on e.NIK equals a.NIK
+                          join ar in accountRoles on a.NIK equals ar.Account_NIK
+                          join r in roles on ar.Role_Id equals r.Id
+                          select new RegisterVM
+                          {
+                              RoleName = r.Name
+                          }).ToList();
 
             return result;
         }*/
