@@ -112,5 +112,10 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("TestCORS")]
+        public ActionResult TestCORS()
+        {
+            return Ok("Test CORS Berhasil");
+        }
     }
 }
