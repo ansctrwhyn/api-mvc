@@ -2,7 +2,7 @@
 
 namespace API.Models.ViewModel
 {
-    public class SignManager
+    public class SignManagerVM
     {
         public String NIK { get; set; }
     }

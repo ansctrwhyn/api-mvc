@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WFoZ1nAa/NNw/vmicRIC5vLDoHmDHeigo9tIgxL5sHKeh7wta0F3e+d7bJZu/kTrh7tAULo5OQGLyHwdnfSmzw==",
+  "dgSpecHash": "iZnofOrxPpgyvX7oGfN8gZIX3mL3idn6nSVzSmKuk/z+vKnbbQ7m/eZTsiOxmJwI4I1UkDLtsHIvSxF1uNlxFA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\LENOVO\\source\\repos\\API\\Client\\Client.csproj",
+  "projectFilePath": "C:\\Users\\LENOVO\\Documents\\GitHub\\API\\api-mvc\\Client\\Client.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

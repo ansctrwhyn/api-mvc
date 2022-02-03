@@ -22,7 +22,7 @@ namespace API.Controllers
         [Authorize(Roles = "Director")]
         [Route("signmanager")]
         [HttpPost("SignManager")]
-        public ActionResult SignManager(SignManager sm)
+        public ActionResult SignManager(SignManagerVM sm)
         {
             var result = accountRoleRepository.SignManager(sm);
             if (result != 0)

@@ -14,7 +14,7 @@ namespace API.Repository.Data
             this.myContext = myContext;
         }
 
-        public int SignManager(SignManager sm)
+        public int SignManager(SignManagerVM sm)
         {
             var getEmployee = myContext.Employees.Where(e => e.NIK == sm.NIK).FirstOrDefault();
             if (getEmployee != null)

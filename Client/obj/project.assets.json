@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\LENOVO\\source\\repos\\API\\Client\\Client.csproj",
+      "projectUniqueName": "C:\\Users\\LENOVO\\Documents\\GitHub\\API\\api-mvc\\Client\\Client.csproj",
       "projectName": "Client",
-      "projectPath": "C:\\Users\\LENOVO\\source\\repos\\API\\Client\\Client.csproj",
+      "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\API\\api-mvc\\Client\\Client.csproj",
       "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\LENOVO\\source\\repos\\API\\Client\\obj\\",
+      "outputPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\API\\api-mvc\\Client\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",

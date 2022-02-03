@@ -7579,11 +7579,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\LENOVO\\source\\repos\\API\\API\\API.csproj",
+      "projectUniqueName": "C:\\Users\\LENOVO\\Documents\\GitHub\\API\\api-mvc\\API\\API.csproj",
       "projectName": "API",
-      "projectPath": "C:\\Users\\LENOVO\\source\\repos\\API\\API\\API.csproj",
+      "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\API\\api-mvc\\API\\API.csproj",
       "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\LENOVO\\source\\repos\\API\\API\\obj\\",
+      "outputPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\API\\api-mvc\\API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",
